@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import emailjs from '@emailjs/browser';
 import { motion, useMotionValue, useTransform, useSpring, useInView, AnimatePresence } from "framer-motion";
 import { 
   Code2, 
@@ -895,12 +896,40 @@ function Contact() {
     if (form.message.trim().length < 10) e.message = "Message must be at least 10 characters";
     return e;
   };
+const handleSubmit = (e) => {
+  const errorsObj = validate();
+  
+  if (Object.keys(errorsObj).length > 0) {
+    setErrors(errorsObj);
+    return;
+  }
 
-  const handleSubmit = () => {
+  // Email logic
+  emailjs.send(
+    'service_unoi42t',  
+    'template-1obof0s',  
+    {
+      name: form.name,
+      email: form.email,
+      message: form.message,
+    },
+    'c6YkAqb12gC6GTYHr'   
+  )
+  .then(() => {
+    setSent(true);
+    setForm({ name: "", email: "", message: "" });
+    alert("Message has been sent!");
+  })
+  .catch((err) => {
+    console.error("FAILED...", err);
+    alert("Error! Message not sent.");
+  });
+};
+ /* const handleSubmit = () => {
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
     setSent(true);
-  };
+  };*/
 
   const fieldStyle = (err) => ({
     width: "100%", background: "rgba(255,255,255,0.04)",
