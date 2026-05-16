@@ -897,6 +897,7 @@ function Contact() {
     return e;
   };
 const handleSubmit = (e) => {
+  e.preventDefault();
   const errorsObj = validate();
   
   if (Object.keys(errorsObj).length > 0) {
@@ -904,25 +905,25 @@ const handleSubmit = (e) => {
     return;
   }
 
-  // Email logic
   emailjs.send(
-    'service_unoi42t',  
-    'template-1obof0s',  
+    'service_unoi42t',
+    'template-1obof0s',
     {
       name: form.name,
       email: form.email,
       message: form.message,
-    },
-    'c6YkAqb12gC6GTYHr'   
+    }
   )
-  .then(() => {
+  .then((result) => {
+    console.log("Email sent successfully!", result);
     setSent(true);
     setForm({ name: "", email: "", message: "" });
-    alert("Message has been sent!");
+    setErrors({});
+    alert("Message sent successfully! ✅");
   })
   .catch((err) => {
-    console.error("FAILED...", err);
-    alert("Error! Message not sent.");
+    console.error("Email sending failed:", err);
+    alert(`Error: ${err.text || "Failed to send message"}`);
   });
 };
  /* const handleSubmit = () => {
