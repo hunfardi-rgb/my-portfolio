@@ -907,7 +907,7 @@ const handleSubmit = (e) => {
 
   emailjs.send(
     'service_unoi42t',
-    'template-1obof0s',
+    'template-9csxvbm',
     {
       name: form.name,
       email: form.email,
