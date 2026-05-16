@@ -1084,6 +1084,10 @@ function CursorGlow() {
    APP
 ───────────────────────────────────────────────────────────── */
 export default function App() {
+  useEffect(() => {
+    emailjs.init('c6YkAqb12gC6GTYHr');
+  }, []);
+
   return (
     <>
       <FontLoader />
