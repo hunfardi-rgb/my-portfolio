@@ -728,6 +728,7 @@ const projects = [
     color: T.blue,
     icon: "💊",
     badge: "Healthcare Tech",
+    preview: "/my-portfolio/medibox-preview.png",
   },
   {
     num: "02",
@@ -738,10 +739,76 @@ const projects = [
     color: T.cyan,
     icon: "🎟",
     badge: "Real-Time Systems",
+    preview: "/my-portfolio/seatflow-preview.png",
   },
 ];
 
+function ImageModal({ image, onClose }) {
+  return (
+    <AnimatePresence>
+      {image && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.8)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            backdropFilter: "blur(4px)",
+          }}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: "90%",
+              maxHeight: "90vh",
+              position: "relative",
+            }}
+          >
+            <img
+              src={image}
+              alt="Project Preview"
+              style={{
+                width: "100%",
+                height: "auto",
+                borderRadius: 12,
+                boxShadow: `0 20px 60px rgba(59,130,246,0.4)`,
+              }}
+            />
+            <button
+              onClick={onClose}
+              style={{
+                position: "absolute",
+                top: -40,
+                right: 0,
+                background: "none",
+                border: "none",
+                color: T.white,
+                fontSize: 24,
+                cursor: "pointer",
+                padding: 8,
+              }}
+            >
+              ✕
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function Projects() {
+  const [selectedImage, setSelectedImage] = useState(null);
   return (
     <section id="projects" style={{ padding: "120px 5vw", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -793,7 +860,8 @@ function Projects() {
                   {/* Arrow */}
                   <motion.div
                     whileHover={{ x: 4, y: -4 }}
-                    style={{ color: p.color, cursor: "pointer", marginTop: 8 }}
+                    onClick={() => p.preview && setSelectedImage(p.preview)}
+                    style={{ color: p.color, cursor: p.preview ? "pointer" : "default", marginTop: 8 }}
                   >
                     <ExternalLink size={20} />
                   </motion.div>
@@ -803,6 +871,8 @@ function Projects() {
           ))}
         </div>
       </div>
+
+      <ImageModal image={selectedImage} onClose={() => setSelectedImage(null)} />
 
       <style>{`
         @media (max-width: 640px) {
