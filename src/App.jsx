@@ -1029,7 +1029,22 @@ function Certifications() {
   ACHIEVEMENTS
 ───────────────────────────────────────────────────────────── */
 function Achievements() {
- const items = [1,2,3,4]; // keep existing four achievement cards (placeholders)
+ // Files uploaded in public/achievements — update names here if you add/remove files
+ const items = [
+   { title: 'Business Email', file: '/achievements/Business Email_by_HP life.pdf' },
+   { title: 'AI for Beginners', file: '/achievements/AI for beginners_by_HP life.pdf' },
+   { title: 'Agile Project Management', file: '/achievements/Agile Project Management_by_HP life.pdf' },
+   { title: 'Affiliate Marketing', file: '/achievements/AFFILIATE MARKETING_by_Digiskill.pdf' },
+   { title: 'Data Analytics & BI', file: '/achievements/DATA ANALYTICS AND BUSINESS INTELLIGENCE _Digiskill.pdf' },
+   { title: 'Google AdSense Blogging', file: '/achievements/certificate-of-completion-for-google-adsense-blogging_by_ehunar.pdf' },
+   { title: 'Data Science & Analytics', file: '/achievements/Data Science & Analytics_by_HP life.pdf' },
+   { title: 'HP Data Science Cert (alt)', file: '/achievements/data science certificate_by_HP life.pdf' },
+   { title: 'Computer Operator Diploma (VTI)', file: '/achievements/Diploma VTI.jpeg', img: true },
+   { title: 'Freelancing', file: '/achievements/FREELANCING_BY_digiskill.pdf' },
+   { title: 'Effective Leadership', file: '/achievements/Effective leadership_by_HP life.pdf' },
+   { title: 'Intro to Digital Business Skills', file: '/achievements/Introduction to Digital Business Skills_by_HP life.pdf' },
+ ];
+
  return (
    <section id="achievements" style={{ padding: '80px 5vw', position: 'relative', zIndex: 1 }}>
      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -1040,16 +1055,33 @@ function Achievements() {
          <h2 className='syne' style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, marginBottom: 18 }}>Achievements</h2>
        </Reveal>
 
-       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
-         {items.map((i) => (
-           <Reveal key={i}>
-             <div className='glass' style={{ padding: 18, borderRadius: 10, display: 'flex', gap: 12, alignItems: 'center' }}>
-               <div style={{ width: 72, height: 72, borderRadius: 10, background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: T.accent }}>IMG</div>
-               <div>
-                 <div className='syne' style={{ fontWeight: 800 }}>Achievement Title</div>
-                 <div style={{ color: T.muted, fontSize: 13, marginTop: 6 }}>Short description or award name</div>
+       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 18 }}>
+         {items.map((it, i) => (
+           <Reveal key={i} delay={0.03 * i}>
+             <a href={it.file} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
+               <div className='glass' style={{ padding: 14, borderRadius: 12, display: 'flex', gap: 12, alignItems: 'center', transition: 'transform 160ms ease, box-shadow 160ms ease', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                 <div style={{ width: 88, height: 64, borderRadius: 8, background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: T.accent, overflow: 'hidden' }}>
+                   {it.img ? (
+                     <img src={it.file} alt={it.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                   ) : (
+                     <div style={{ textAlign: 'center', padding: 6 }}>
+                       <div style={{ fontSize: 22 }}>{'📄'}</div>
+                       <div style={{ fontSize: 11, marginTop: 6, color: T.muted }}>{it.file.split('/').pop()}</div>
+                     </div>
+                   )}
+                 </div>
+
+                 <div style={{ flex: 1 }}>
+                   <div className='syne' style={{ fontWeight: 800, color: T.text }}>{it.title}</div>
+                   <div style={{ color: T.muted, fontSize: 13, marginTop: 6 }}>Click to view / download</div>
+                 </div>
+
+                 <div style={{ textAlign: 'right' }}>
+                   <div style={{ color: T.accent2, fontWeight: 700, fontSize: 13 }}>Certificate</div>
+                   <div style={{ marginTop: 8 }}><ExternalLink size={16} style={{ color: T.accent }} /></div>
+                 </div>
                </div>
-             </div>
+             </a>
            </Reveal>
          ))}
        </div>
