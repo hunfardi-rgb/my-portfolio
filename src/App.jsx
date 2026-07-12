@@ -873,7 +873,7 @@ function Certifications() {
  ];
 
  // Dynamically load uploaded certificate manifest (public/certificates.json)
- const [uploaded, setUploaded] = useState([]);
+ const [manifest, setManifest] = useState({ files: [], titles: {} });
  useEffect(() => {
    let cancelled = false;
    fetch('/certificates.json')
@@ -883,27 +883,22 @@ function Certifications() {
      })
      .then((data) => {
        if (cancelled) return;
-       // Accept either { files: [...] } or an array
-       if (Array.isArray(data)) setUploaded(data);
-       else if (data && Array.isArray(data.files)) setUploaded(data.files);
-       else setUploaded([]);
+       // Manifest may be an array or an object with files and titles
+       if (Array.isArray(data)) setManifest({ files: data, titles: {} });
+       else if (data && Array.isArray(data.files)) setManifest({ files: data.files, titles: data.titles || {} });
+       else setManifest({ files: [], titles: {} });
      })
      .catch(() => {
-       // fallback to empty — no uploaded manifest
-       if (!cancelled) setUploaded([]);
+       if (!cancelled) setManifest({ files: [], titles: {} });
      });
    return () => { cancelled = true; };
  }, []);
 
- // Helper: find uploaded file matching a cert key (uploaded entries can be strings or objects)
- const getFilename = (entry) => (typeof entry === 'string' ? entry : (entry.filename || entry.file || ''));
+ // Helper: get filename from manifest entry (manifest.files are strings)
  const findFileFor = (key) => {
    const lower = key.toLowerCase();
-   const entry = uploaded.find((e) => {
-     const name = getFilename(e).toLowerCase();
-     return name && name.includes(lower);
-   });
-   return entry ? getFilename(entry) : null;
+   const entry = manifest.files.find((fname) => fname.toLowerCase().includes(lower));
+   return entry || null;
  };
 
  // Build merged list: known certs with file if found
@@ -913,7 +908,7 @@ function Certifications() {
  });
 
  // Append any uploaded files not already matched
- const uploadedFilenames = uploaded.map(getFilename).filter(Boolean);
+ const uploadedFilenames = manifest.files.filter(Boolean);
  const matchedFiles = new Set(merged.filter((m) => m.file).map((m) => m.file.split('/').pop()));
  uploadedFilenames.forEach((f) => {
    if (!matchedFiles.has(f)) {
@@ -948,7 +943,11 @@ function Certifications() {
                    </div>
 
                    <div style={{ flex: 1 }}>
-                     <div className='syne' style={{ fontWeight: 700 }}>{c.title}</div>
+                     {/* Prefer manifest title if available */}
+                     <div className='syne' style={{ fontWeight: 700 }}>{(() => {
+                     const filename = c.file ? c.file.split('/').pop() : null;
+                     return filename && manifest.titles && manifest.titles[filename] ? manifest.titles[filename] : c.title;
+                     })()}</div>
                      <div style={{ color: T.muted, fontSize: 13, marginTop: 6 }}>{c.issuer}</div>
                    </div>
 
