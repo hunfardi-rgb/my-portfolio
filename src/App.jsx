@@ -872,37 +872,50 @@ function Certifications() {
    { id: 11, key: 'diploma', title: 'Computer Operator Diploma', issuer: 'Vocational Training Institute (VTI), Shorkot', date: '—' },
  ];
 
- // Files uploaded to public/achievements (detected earlier)
- const uploaded = [
-   'Business Email_by_HP life.pdf',
-   'AI for beginners_by_HP life.pdf',
-   'Agile Project Management_by_HP life.pdf',
-   'AFFILIATE MARKETING_by_Digiskill.pdf',
-   'DATA ANALYTICS AND BUSINESS INTELLIGENCE _Digiskill.pdf',
-   'certificate-of-completion-for-google-adsense-blogging_by_ehunar.pdf',
-   'Data Science & Analytics_by_HP life.pdf',
-   'data science certificate_by_HP life.pdf',
-   'Diploma VTI.jpeg',
-   'FREELANCING_BY_digiskill.pdf',
-   'Effective leadership_by_HP life.pdf',
-   'Introduction to Digital Business Skills_by_HP life.pdf',
- ];
+ // Dynamically load uploaded certificate manifest (public/certificates.json)
+ const [uploaded, setUploaded] = useState([]);
+ useEffect(() => {
+   let cancelled = false;
+   fetch('/certificates.json')
+     .then((r) => {
+       if (!r.ok) throw new Error('Manifest not found');
+       return r.json();
+     })
+     .then((data) => {
+       if (cancelled) return;
+       // Accept either { files: [...] } or an array
+       if (Array.isArray(data)) setUploaded(data);
+       else if (data && Array.isArray(data.files)) setUploaded(data.files);
+       else setUploaded([]);
+     })
+     .catch(() => {
+       // fallback to empty — no uploaded manifest
+       if (!cancelled) setUploaded([]);
+     });
+   return () => { cancelled = true; };
+ }, []);
 
- // Helper: find uploaded file matching a cert key
+ // Helper: find uploaded file matching a cert key (uploaded entries can be strings or objects)
+ const getFilename = (entry) => (typeof entry === 'string' ? entry : (entry.filename || entry.file || ''));
  const findFileFor = (key) => {
    const lower = key.toLowerCase();
-   return uploaded.find(f => f.toLowerCase().includes(lower)) || null;
+   const entry = uploaded.find((e) => {
+     const name = getFilename(e).toLowerCase();
+     return name && name.includes(lower);
+   });
+   return entry ? getFilename(entry) : null;
  };
 
  // Build merged list: known certs with file if found
- const merged = certs.map(c => {
+ const merged = certs.map((c) => {
    const f = findFileFor(c.key);
    return { ...c, file: f ? `/achievements/${f}` : null };
  });
 
  // Append any uploaded files not already matched
- const matchedFiles = new Set(merged.filter(m => m.file).map(m => m.file.split('/').pop()));
- uploaded.forEach(f => {
+ const uploadedFilenames = uploaded.map(getFilename).filter(Boolean);
+ const matchedFiles = new Set(merged.filter((m) => m.file).map((m) => m.file.split('/').pop()));
+ uploadedFilenames.forEach((f) => {
    if (!matchedFiles.has(f)) {
      merged.push({ id: `u-${f}`, title: f.replace(/_/g, ' ').replace(/\.pdf$/i, '').replace(/\.(jpeg|jpg|png)$/i, ''), issuer: 'Uploaded', date: '—', file: `/achievements/${f}` });
    }
