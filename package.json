@@ -4,11 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+      "generate:certs": "node scripts/generate-certificates.mjs",
+      "predev": "npm run generate:certs",
+      "dev": "vite",
+      "prebuild": "npm run generate:certs",
+      "build": "vite build",
+      "lint": "eslint .",
+      "preview": "vite preview"
+    },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@tailwindcss/postcss": "^4.3.0",
