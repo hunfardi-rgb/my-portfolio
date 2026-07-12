@@ -306,12 +306,9 @@ function Typewriter({ words }) {
 ───────────────────────────────────────────────────────────── */
 const navLinks = [
   { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Education", href: "#education" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
   { label: "Certifications", href: "#certifications" },
-  { label: "Achievements", href: "#achievements" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -357,7 +354,7 @@ function Nav() {
             onMouseLeave={e => e.target.style.color = T.muted}
           >{l.label}</a>
         ))}
-        <MagneticBtn href="#contact" style={{ padding: "8px 20px", fontSize: 12 }}>Hire Me</MagneticBtn>
+        <MagneticBtn href="#contact" style={{ padding: "8px 20px", fontSize: 12 }}>Contact Me</MagneticBtn>
       </div>
 
       {/* Mobile hamburger */}
@@ -467,7 +464,7 @@ function Hero() {
             style={{ display: "flex", gap: 16, flexWrap: "wrap" }}
           >
             <MagneticBtn href="#projects"><Sparkles size={15} />View My Work</MagneticBtn>
-                        <MagneticBtn href="/resume.pdf" variant="outline"><ExternalLink size={15} />Download CV</MagneticBtn>
+                        <MagneticBtn href="#contact" variant="outline"><Mail size={15} />Contact Me</MagneticBtn>
           </motion.div>
         </div>
 
@@ -606,117 +603,7 @@ function About() {
   );
 }
 
-/* ─────────────────────────────────────────────────────────────
-  EXPERIENCE (Work / Teaching Experience)
-───────────────────────────────────────────────────────────── */
-function Experience() {
- // Keep any existing entries (none detected). Placeholder timeline entries — replace or extend as needed.
- const items = [
-   {
-     role: "Teaching Intern / Assistant",
-     org: "Local Computer Science Institute, Shorkot",
-     period: "2024 - Present",
-     desc: "Assisted in classroom instruction, prepared lab exercises, and mentored students on foundational programming concepts.",
-   },
-   {
-     role: "Freelance Web Developer",
-     org: "Self-Employed",
-     period: "2022 - Present",
-     desc: "Built responsive websites and small web apps for local clients using PHP, MySQL, and modern frontend techniques.",
-   },
- ];
 
- return (
-   <section id="experience" style={{ padding: "120px 5vw", position: "relative", zIndex: 1, background: 'transparent' }}>
-     <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-       <Reveal>
-         <div className="mono" style={{ color: T.accent2, fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 16 }}>// teaching_experience.timeline</div>
-       </Reveal>
-       <Reveal delay={0.1}>
-         <h2 className="syne" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, marginBottom: 40 }}>
-           Work & <span style={{ color: T.accent }}>Teaching Experience</span>
-         </h2>
-       </Reveal>
-
-       <div style={{ display: 'grid', gap: 20 }}>
-         {items.map((it, i) => (
-           <Reveal key={i} delay={0.05 * i} direction={i % 2 === 0 ? 'left' : 'right'}>
-             <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-               <div style={{ width: 12, display: 'flex', justifyContent: 'center' }}>
-                 <div style={{ width: 14, height: 14, borderRadius: 999, background: T.accent, boxShadow: `0 6px 20px ${T.borderGlow}` }} />
-               </div>
-               <div style={{ flex: 1 }}>
-                 <TiltCard style={{ padding: '22px 20px' }}>
-                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
-                     <div>
-                       <div className="syne" style={{ fontSize: 16, fontWeight: 800 }}>{it.role}</div>
-                       <div style={{ color: T.muted, fontSize: 13 }}>{it.org}</div>
-                     </div>
-                     <div style={{ color: T.deep, fontWeight: 700 }}>{it.period}</div>
-                   </div>
-                   <p style={{ color: T.muted, marginTop: 12 }}>{it.desc}</p>
-                 </TiltCard>
-               </div>
-             </div>
-           </Reveal>
-         ))}
-       </div>
-     </div>
-   </section>
- );
-}
-
-/* ─────────────────────────────────────────────────────────────
-  EDUCATION
-───────────────────────────────────────────────────────────── */
-function Education() {
- const schools = [
-   {
-     title: 'BS Information Technology',
-     org: 'United College Darbar Sharif Campus (Hazrat Sultan Baho) — affiliated with GC University Faisalabad',
-     period: '2022 – 2026 (In Progress)'
-   },
-   {
-     title: 'Intermediate in Computer Science (ICS)',
-     org: 'Govt. Associate College for Women, Shorkot City, Jhang',
-     period: '2020 – 2022'
-   },
-   {
-     title: 'Matriculation (Science)',
-     org: 'Govt. Girls High School, Shorkot City, Jhang',
-     period: '2018 – 2020'
-   }
- ];
-
- return (
-   <section id="education" style={{ padding: '100px 5vw', position: 'relative', zIndex: 1 }}>
-     <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-       <Reveal>
-         <div className="mono" style={{ color: T.accent2, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>// academic_record</div>
-       </Reveal>
-       <Reveal delay={0.05}>
-         <h2 className="syne" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.6rem)', fontWeight: 800, marginBottom: 20 }}>Education</h2>
-       </Reveal>
-
-       <div style={{ display: 'grid', gap: 16 }}>
-         {schools.map((s, i) => (
-           <Reveal key={i} delay={0.05 * i}>
-             <TiltCard style={{ padding: '20px 18px' }}>
-               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                 <div>
-                   <div className='syne' style={{ fontWeight: 800 }}>{s.title}</div>
-                   <div style={{ color: T.muted, fontSize: 13, marginTop: 6 }}>{s.org}</div>
-                 </div>
-                 <div style={{ color: T.deep, fontWeight: 700 }}>{s.period}</div>
-               </div>
-             </TiltCard>
-           </Reveal>
-         ))}
-       </div>
-     </div>
-   </section>
- );
-}
 
 /* ─────────────────────────────────────────────────────────────
   SKILLS
@@ -1025,70 +912,6 @@ function Certifications() {
  );
 }
 
-/* ─────────────────────────────────────────────────────────────
-  ACHIEVEMENTS
-───────────────────────────────────────────────────────────── */
-function Achievements() {
- // Files uploaded in public/achievements — update names here if you add/remove files
- const items = [
-   { title: 'Business Email', file: '/achievements/Business Email_by_HP life.pdf' },
-   { title: 'AI for Beginners', file: '/achievements/AI for beginners_by_HP life.pdf' },
-   { title: 'Agile Project Management', file: '/achievements/Agile Project Management_by_HP life.pdf' },
-   { title: 'Affiliate Marketing', file: '/achievements/AFFILIATE MARKETING_by_Digiskill.pdf' },
-   { title: 'Data Analytics & BI', file: '/achievements/DATA ANALYTICS AND BUSINESS INTELLIGENCE _Digiskill.pdf' },
-   { title: 'Google AdSense Blogging', file: '/achievements/certificate-of-completion-for-google-adsense-blogging_by_ehunar.pdf' },
-   { title: 'Data Science & Analytics', file: '/achievements/Data Science & Analytics_by_HP life.pdf' },
-   { title: 'HP Data Science Cert (alt)', file: '/achievements/data science certificate_by_HP life.pdf' },
-   { title: 'Computer Operator Diploma (VTI)', file: '/achievements/Diploma VTI.jpeg', img: true },
-   { title: 'Freelancing', file: '/achievements/FREELANCING_BY_digiskill.pdf' },
-   { title: 'Effective Leadership', file: '/achievements/Effective leadership_by_HP life.pdf' },
-   { title: 'Intro to Digital Business Skills', file: '/achievements/Introduction to Digital Business Skills_by_HP life.pdf' },
- ];
-
- return (
-   <section id="achievements" style={{ padding: '80px 5vw', position: 'relative', zIndex: 1 }}>
-     <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-       <Reveal>
-         <div className='mono' style={{ color: T.accent2, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>// achievements</div>
-       </Reveal>
-       <Reveal delay={0.05}>
-         <h2 className='syne' style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, marginBottom: 18 }}>Achievements</h2>
-       </Reveal>
-
-       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 18 }}>
-         {items.map((it, i) => (
-           <Reveal key={i} delay={0.03 * i}>
-             <a href={it.file} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
-               <div className='glass' style={{ padding: 14, borderRadius: 12, display: 'flex', gap: 12, alignItems: 'center', transition: 'transform 160ms ease, box-shadow 160ms ease', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-                 <div style={{ width: 88, height: 64, borderRadius: 8, background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: T.accent, overflow: 'hidden' }}>
-                   {it.img ? (
-                     <img src={it.file} alt={it.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                   ) : (
-                     <div style={{ textAlign: 'center', padding: 6 }}>
-                       <div style={{ fontSize: 22 }}>{'📄'}</div>
-                       <div style={{ fontSize: 11, marginTop: 6, color: T.muted }}>{it.file.split('/').pop()}</div>
-                     </div>
-                   )}
-                 </div>
-
-                 <div style={{ flex: 1 }}>
-                   <div className='syne' style={{ fontWeight: 800, color: T.text }}>{it.title}</div>
-                   <div style={{ color: T.muted, fontSize: 13, marginTop: 6 }}>Click to view / download</div>
-                 </div>
-
-                 <div style={{ textAlign: 'right' }}>
-                   <div style={{ color: T.accent2, fontWeight: 700, fontSize: 13 }}>Certificate</div>
-                   <div style={{ marginTop: 8 }}><ExternalLink size={16} style={{ color: T.accent }} /></div>
-                 </div>
-               </div>
-             </a>
-           </Reveal>
-         ))}
-       </div>
-     </div>
-   </section>
- );
-}
 
 /* ─────────────────────────────────────────────────────────────
   DIGITAL STRATEGY & AI
