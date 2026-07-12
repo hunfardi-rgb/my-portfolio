@@ -857,53 +857,100 @@ function Projects() {
   CERTIFICATIONS
 ───────────────────────────────────────────────────────────── */
 function Certifications() {
+ // Known certificates (as provided by user)
  const certs = [
-   { id: 1, title: 'Agile Project Management', issuer: 'HP LIFE (HP Foundation)', date: 'July 2025' },
-   { id: 2, title: 'Business Email', issuer: 'HP LIFE (HP Foundation)', date: 'July 2025' },
-   { id: 3, title: 'Introduction to Digital Business Skills', issuer: 'HP LIFE (HP Foundation)', date: 'June 2025' },
-   { id: 4, title: 'Data Science & Analytics', issuer: 'HP LIFE (HP Foundation)', date: 'June 2025' },
-   { id: 5, title: 'Effective Leadership', issuer: 'HP LIFE (HP Foundation)', date: 'June 2025' },
-   { id: 6, title: 'AI for Beginners', issuer: 'HP LIFE (HP Foundation)', date: 'June 2025' },
-   { id: 7, title: 'Data Analytics and Business Intelligence', issuer: 'DigiSkills.pk — DSTP 3.0, Batch 01', date: 'December 2025', verify: true },
-   { id: 8, title: 'Affiliate Marketing', issuer: 'DigiSkills.pk — DSTP 2.0, Batch 07', date: 'July 2024', verify: true },
-   { id: 9, title: 'Freelancing', issuer: 'DigiSkills.pk — DSTP 2.0, Batch 07', date: 'July 2024', verify: true },
-   { id: 10, title: 'Google AdSense Blogging', issuer: 'e-Rozgaar Punjab Program', date: 'March 2026' },
-   { id: 11, title: 'Computer Operator Diploma', issuer: 'Vocational Training Institute (VTI), Shorkot', date: '—' },
+   { id: 1, key: 'agile', title: 'Agile Project Management', issuer: 'HP LIFE (HP Foundation)', date: 'July 2025' },
+   { id: 2, key: 'business email', title: 'Business Email', issuer: 'HP LIFE (HP Foundation)', date: 'July 2025' },
+   { id: 3, key: 'digital business', title: 'Introduction to Digital Business Skills', issuer: 'HP LIFE (HP Foundation)', date: 'June 2025' },
+   { id: 4, key: 'data science', title: 'Data Science & Analytics', issuer: 'HP LIFE (HP Foundation)', date: 'June 2025' },
+   { id: 5, key: 'effective leadership', title: 'Effective Leadership', issuer: 'HP LIFE (HP Foundation)', date: 'June 2025' },
+   { id: 6, key: 'ai for beginners', title: 'AI for Beginners', issuer: 'HP LIFE (HP Foundation)', date: 'June 2025' },
+   { id: 7, key: 'data analytics', title: 'Data Analytics and Business Intelligence', issuer: 'DigiSkills.pk — DSTP 3.0, Batch 01', date: 'December 2025', verify: true },
+   { id: 8, key: 'affiliate marketing', title: 'Affiliate Marketing', issuer: 'DigiSkills.pk — DSTP 2.0, Batch 07', date: 'July 2024', verify: true },
+   { id: 9, key: 'freelancing', title: 'Freelancing', issuer: 'DigiSkills.pk — DSTP 2.0, Batch 07', date: 'July 2024', verify: true },
+   { id: 10, key: 'adsense', title: 'Google AdSense Blogging', issuer: 'e-Rozgaar Punjab Program', date: 'March 2026' },
+   { id: 11, key: 'diploma', title: 'Computer Operator Diploma', issuer: 'Vocational Training Institute (VTI), Shorkot', date: '—' },
  ];
+
+ // Files uploaded to public/achievements (detected earlier)
+ const uploaded = [
+   'Business Email_by_HP life.pdf',
+   'AI for beginners_by_HP life.pdf',
+   'Agile Project Management_by_HP life.pdf',
+   'AFFILIATE MARKETING_by_Digiskill.pdf',
+   'DATA ANALYTICS AND BUSINESS INTELLIGENCE _Digiskill.pdf',
+   'certificate-of-completion-for-google-adsense-blogging_by_ehunar.pdf',
+   'Data Science & Analytics_by_HP life.pdf',
+   'data science certificate_by_HP life.pdf',
+   'Diploma VTI.jpeg',
+   'FREELANCING_BY_digiskill.pdf',
+   'Effective leadership_by_HP life.pdf',
+   'Introduction to Digital Business Skills_by_HP life.pdf',
+ ];
+
+ // Helper: find uploaded file matching a cert key
+ const findFileFor = (key) => {
+   const lower = key.toLowerCase();
+   return uploaded.find(f => f.toLowerCase().includes(lower)) || null;
+ };
+
+ // Build merged list: known certs with file if found
+ const merged = certs.map(c => {
+   const f = findFileFor(c.key);
+   return { ...c, file: f ? `/achievements/${f}` : null };
+ });
+
+ // Append any uploaded files not already matched
+ const matchedFiles = new Set(merged.filter(m => m.file).map(m => m.file.split('/').pop()));
+ uploaded.forEach(f => {
+   if (!matchedFiles.has(f)) {
+     merged.push({ id: `u-${f}`, title: f.replace(/_/g, ' ').replace(/\.pdf$/i, '').replace(/\.(jpeg|jpg|png)$/i, ''), issuer: 'Uploaded', date: '—', file: `/achievements/${f}` });
+   }
+ });
 
  return (
    <section id="certifications" style={{ padding: '80px 5vw', position: 'relative', zIndex: 1, background: T.surface }}>
      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <Reveal>
-         <div className='mono' style={{ color: T.accent2, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>// credentials</div>
-        </Reveal>
+       <Reveal>
+         <div className='mono' style={{ color: T.accent2, fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>// certificates</div>
+       </Reveal>
        <Reveal delay={0.05}>
-         <h2 className='syne' style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: 800, marginBottom: 24 }}>Certifications</h2>
+         <h2 className='syne' style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: 800, marginBottom: 24 }}>Certificates</h2>
        </Reveal>
 
        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
-         {certs.map((c) => (
-           <Reveal key={c.id}>
-             <div className='glass' style={{ padding: 14, borderRadius: 10, background: T.glass, borderTop: `6px solid ${T.accent}`, transition: 'transform 0.18s ease, box-shadow 0.18s ease' }}>
-               <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                 <div style={{ width: 64, height: 48, background: 'rgba(0,0,0,0.18)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: T.accent }}>
-                   <div style={{ fontSize: 20 }}>{'📜'}</div>
-                 </div>
-                 <div style={{ flex: 1 }}>
-                   <div className='syne' style={{ fontWeight: 700 }}>{c.title}</div>
-                   <div style={{ color: T.muted, fontSize: 13, marginTop: 6 }}>{c.issuer}</div>
-                 </div>
-                 <div style={{ textAlign: 'right' }}>
-                   <div style={{ color: T.deep, fontWeight: 700 }}>{c.date}</div>
-                   {c.verify && (
-                     <a href={'https://www.digiskills.pk/verify'} target='_blank' rel='noreferrer' style={{ display: 'inline-block', marginTop: 8, padding: '6px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.03)', color: T.accent, fontSize: 12, textDecoration: 'none', border: `1px solid ${T.border}` }}>Verify</a>
-                   )}
+         {merged.map((c, i) => (
+           <Reveal key={c.id || i}>
+             <a href={c.file || '#'} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
+               <div className='glass' style={{ padding: 14, borderRadius: 10, background: T.glass, borderTop: `6px solid ${T.accent}`, transition: 'transform 0.18s ease, box-shadow 0.18s ease' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                 <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                   <div style={{ width: 64, height: 48, background: 'rgba(0,0,0,0.18)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: T.accent, overflow: 'hidden' }}>
+                     {c.file && /\.(jpe?g|png)$/i.test(c.file) ? (
+                       <img src={c.file} alt={c.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                     ) : (
+                       <div style={{ textAlign: 'center', padding: 6 }}>
+                         <div style={{ fontSize: 22 }}>{'📜'}</div>
+                       </div>
+                     )}
+                   </div>
+
+                   <div style={{ flex: 1 }}>
+                     <div className='syne' style={{ fontWeight: 700 }}>{c.title}</div>
+                     <div style={{ color: T.muted, fontSize: 13, marginTop: 6 }}>{c.issuer}</div>
+                   </div>
+
+                   <div style={{ textAlign: 'right' }}>
+                     <div style={{ color: T.deep, fontWeight: 700 }}>{c.date}</div>
+                     {c.verify && (
+                       <a href={'https://www.digiskills.pk/verify'} target='_blank' rel='noreferrer' style={{ display: 'inline-block', marginTop: 8, padding: '6px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.03)', color: T.accent, fontSize: 12, textDecoration: 'none', border: `1px solid ${T.border}` }}>Verify</a>
+                     )}
+                     {c.file && (
+                       <div style={{ marginTop: 8 }}><ExternalLink size={16} style={{ color: T.accent }} /></div>
+                     )}
+                   </div>
                  </div>
                </div>
-               <div style={{ marginTop: 12, color: T.muted, fontSize: 13 }}>
-                 <em>Image placeholder:</em> <span style={{ color: T.text }}>add file at /public/certs/cert-{c.id}.png</span>
-               </div>
-             </div>
+             </a>
            </Reveal>
          ))}
        </div>
